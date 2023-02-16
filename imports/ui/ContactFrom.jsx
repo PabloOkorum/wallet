@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ContactsCollection } from '../api/ContactsCollection';
+import { Meteor } from "meteor/meteor";
 export const ContactFrom = () => {
 
     const [name, setName] = useState("");
@@ -8,10 +8,18 @@ export const ContactFrom = () => {
 
     const saveContact = () => {
 
-        ContactsCollection.insert({ name, email, imgenUrl });
-        setEmail("");
-        setName("");
-        setImgenUrl("");
+        Meteor.call('contacts.insert', { name, email, imgenUrl }, (errorResponse) => {
+            if (errorResponse) {
+                alert(errorResponse.error);
+                console.log(errorResponse.error);
+            } else {
+                setEmail("");
+                setName("");
+                setImgenUrl("");
+            }
+
+        });
+    
     }
 
     return (
@@ -30,7 +38,7 @@ export const ContactFrom = () => {
                 </label>
                 <input id='email'
                     onChange={(e) => setEmail(e.target.value)}
-                    type="email" value={email}/>
+                    type="email" value={email} />
             </div>
             <div>
                 <label htmlFor='imgenUrl'>
@@ -38,7 +46,7 @@ export const ContactFrom = () => {
                 </label>
                 <input id='imgenUrl'
                     onChange={(e) => setImgenUrl(e.target.value)}
-                    type="text" value={imgenUrl}/>
+                    type="text" value={imgenUrl} />
             </div>
 
             <div>
