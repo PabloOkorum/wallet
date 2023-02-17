@@ -25,7 +25,12 @@ Meteor.methods({
 
     'contacts.remove'({ contactId }) {
         console.log(contactId);
-        return ContactsCollection.remove({ _id: contactId });
+        ContactsCollection.remove({ _id: contactId });
+    },
+
+    'contacts.archive'({ contactId }) {
+        console.log(contactId);
+        ContactsCollection.update({ _id: contactId }, { $set: { archived: true } });
     }
 })
 
