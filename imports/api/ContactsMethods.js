@@ -1,21 +1,31 @@
-import {ContactsCollection} from "./ContactsCollection";
+import { Meteor } from "meteor/meteor";
+import { check } from "meteor/check";
+import { ContactsCollection } from "./ContactsCollection";
 
 Meteor.methods({
 
-    'contacts.insert'({ name, email, imgenUrl }) {    
-        
-        if(!name){
+    'contacts.insert'({ name, email, imgenUrl }) {
+
+        check(name, String);
+        check(email, String);
+        check(imgenUrl, String);
+
+        if (!name) {
             throw new Meteor.Error("Name is requerit");
         }
-        if(!email){
+        if (!email) {
             throw new Meteor.Error("email is requerit");
         }
-        if(!imgenUrl){
+        if (!imgenUrl) {
             throw new Meteor.Error("imgenUrl is requerit");
         }
-        
-        return   ContactsCollection.insert({ name, email, imgenUrl });       
-       }
-       
+
+        return ContactsCollection.insert({ name, email, imgenUrl, createdAt: new Date() });
+    },
+
+    'contacts.remove'({ contactId }) {
+        console.log(contactId);
+        return ContactsCollection.remove({ _id: contactId });
+    }
 })
 

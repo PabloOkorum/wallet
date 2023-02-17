@@ -1,29 +1,58 @@
 import React, { useState } from 'react';
 import { Meteor } from "meteor/meteor";
+import { ErrorAlert } from './component/Error';
+import { SuccesAlert } from './component/SuccesAlert.jsx';
 export const ContactFrom = () => {
 
+    //funciones
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [imgenUrl, setImgenUrl] = useState("");
+    const [error, setError] = React.useState("");
+    const [success, setSuccess] = React.useState("");
+
+    const showError = ({ message }) => {
+        setError(message);
+        setTimeout(() => {
+            setError("");
+        }, 3000)
+    }
+
+    const saveSuccess = ({ message }) => {
+
+        setSuccess(message);
+        setEmail("");
+        setName("");
+        setImgenUrl("");
+        setTimeout(() => {
+            setSuccess("");
+        }, 3000)
+
+    }
 
     const saveContact = () => {
 
         Meteor.call('contacts.insert', { name, email, imgenUrl }, (errorResponse) => {
             if (errorResponse) {
-                alert(errorResponse.error);
-                console.log(errorResponse.error);
+
+                showError({ message: errorResponse.error });
+
+
             } else {
-                setEmail("");
-                setName("");
-                setImgenUrl("");
+
+                saveSuccess({ message: "Contact succes" });
+
             }
 
         });
-    
+
     }
 
     return (
         <form>
+            {error && <ErrorAlert message={error} />}
+            {success && <SuccesAlert message={success} />}
+
             <div>
                 <label htmlFor='name'  >
                     name
