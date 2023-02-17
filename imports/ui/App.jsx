@@ -1,7 +1,7 @@
 import React from 'react';
 import { ContactFrom } from './ContactFrom';
 import { ContactList } from './ContactList';
-import { Headerss } from './Header';
+import { Headerss } from './component/Header';
 
 //contacto: nombre, email, imgenUrl
 export const App = () => (
