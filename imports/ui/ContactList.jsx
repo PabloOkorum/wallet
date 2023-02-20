@@ -1,15 +1,18 @@
 import React, { memo } from 'react';
 import { ContactsCollection } from '../api/ContactsCollection';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
+import { Loading } from './component/Loading';
 
 export const ContactList = () => {
 
     const isLoading = useSubscribe('contacts');
-    const contacts = useFind(() => ContactsCollection.find({}, { sort: { CreatedAt: -1 } })) // Tracker 
-    //const [archivados, setArvhivados] = useState(true);
-    //const contacts = useTracker(() => {
-    //   return ContactsCollection.find({}, { sort: { CreatedAt: -1 } }).fetch(); // Tracker
-    // });
+    const contacts = useFind(() =>
+        ContactsCollection.find(
+            {},
+            { sort: { CreatedAt: -1 } }
+        )
+    );
+
 
     const removeContact = (event, _id) => {
         event.preventDefault();
@@ -17,7 +20,7 @@ export const ContactList = () => {
         // , (error, result ) => console.log(error , result) 
     }
 
-   // const mostrarArchivados = () => { setArvhivados(false); }
+    // const mostrarArchivados = () => { setArvhivados(false); }
 
 
 
@@ -29,13 +32,14 @@ export const ContactList = () => {
 
 
     if (isLoading()) {
-        return <p>Loading...</p>
+        return <Loading />
     }
 
     const ContactItem = memo(({ contact }) => {
         return (
 
-            <li > {contact.name} - {contact.email} -
+            <li > {contact.imageUrl && (<div><img src={contact.imageUrl} /></div>)}
+                {contact.name} - {contact.email} - {contact.walletId} -
 
                 <a
                     href='#'

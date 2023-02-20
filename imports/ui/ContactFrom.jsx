@@ -8,6 +8,7 @@ export const ContactFrom = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [imgenUrl, setImgenUrl] = useState("");
+    const [walletId, setWalletId] = useState("");
     const [error, setError] = React.useState("");
     const [success, setSuccess] = React.useState("");
 
@@ -24,6 +25,7 @@ export const ContactFrom = () => {
         setEmail("");
         setName("");
         setImgenUrl("");
+        setWalletId("");
         setTimeout(() => {
             setSuccess("");
         }, 3000)
@@ -32,7 +34,7 @@ export const ContactFrom = () => {
 
     const saveContact = () => {
 
-        Meteor.call('contacts.insert', { name, email, imgenUrl }, (errorResponse) => {
+        Meteor.call('contacts.insert', { name, email, imgenUrl, walletId }, (errorResponse) => {
             if (errorResponse) {
 
                 showError({ message: errorResponse.error });
@@ -61,6 +63,7 @@ export const ContactFrom = () => {
                     onChange={(e) => setName(e.target.value)}
                     type="text" value={name} />
             </div>
+
             <div>
                 <label htmlFor='email'>
                     email
@@ -69,6 +72,7 @@ export const ContactFrom = () => {
                     onChange={(e) => setEmail(e.target.value)}
                     type="email" value={email} />
             </div>
+
             <div>
                 <label htmlFor='imgenUrl'>
                     imgenUrl
@@ -76,6 +80,15 @@ export const ContactFrom = () => {
                 <input id='imgenUrl'
                     onChange={(e) => setImgenUrl(e.target.value)}
                     type="text" value={imgenUrl} />
+            </div>
+
+            <div>
+                <label htmlFor='walletId'>
+                    wallet Id
+                </label>
+                <input id='walletId'
+                    onChange={(e) => setWalletId(e.target.value)}
+                    type="text" value={walletId} />
             </div>
 
             <div>
