@@ -1,9 +1,8 @@
 import { Meteor } from "meteor/meteor";
 import { check } from "meteor/check";
-import { ContactsCollection } from "./ContactsCollection";
+import { ContactsCollection } from "../collections/ContactsCollection";
 
 Meteor.methods({
-
     'contacts.insert'({ name, email, imgenUrl, walletId }) {
 
         check(name, String);
@@ -17,9 +16,7 @@ Meteor.methods({
         if (!email) {
             throw new Meteor.Error("email is requerit");
         }
-        if (!imgenUrl) {
-            throw new Meteor.Error("imgenUrl is requerit");
-        }
+
         if (!walletId) {
             throw new Meteor.Error("wallet ID is requerit");
         }
@@ -34,11 +31,13 @@ Meteor.methods({
     },
 
     'contacts.remove'({ contactId }) {
+        check(contactId, String);
         console.log(contactId);
         ContactsCollection.remove({ _id: contactId });
     },
 
     'contacts.archive'({ contactId }) {
+        check(contactId, String);
         console.log(contactId);
         ContactsCollection.update({ _id: contactId }, { $set: { archived: true } });
     }

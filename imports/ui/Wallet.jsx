@@ -3,9 +3,9 @@ import React from 'react';
 import { Modal } from './component/Modal';
 import { SelectContact } from './component/SelectContact';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
-import { ContactsCollection } from '../api/ContactsCollection';
 import { Loading } from './component/Loading';
-import { WalletsCollection } from '../api/WalletCollection';
+import { WalletsCollection } from '../api/collections/WalletsCollection';
+import { ContactsCollection } from '../api/collections/ContactsCollection';
 
 export const Wallet = () => {
 
@@ -33,14 +33,15 @@ export const Wallet = () => {
             {
                 isTransferring,
                 sourceWalletId: wallet._id,
-                destinationWalledId: destinationWallet?.walletId || "",
+                destinationWalletId: destinationWallet?.walletId || "",
                 amount: Number(amount),
             },
             (errorResponse) => {
+               
                 if (errorResponse) {
 
                     errorResponse.details?.forEach((error) => {
-                        setErrorMenssage(error.message);
+                        setErrormenssage(error.message);
                     });
 
                 } else {

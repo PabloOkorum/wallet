@@ -34,7 +34,8 @@ export const ContactFrom = () => {
 
     const saveContact = () => {
 
-        Meteor.call('contacts.insert', { name, email, imgenUrl, walletId }, (errorResponse) => {
+        Meteor.call('contacts.insert', { name, email, imgenUrl, walletId }, 
+        (errorResponse) => {
             if (errorResponse) {
 
                 showError({ message: errorResponse.error });
