@@ -1,31 +1,35 @@
 import { Meteor } from "meteor/meteor";
-import { check } from "meteor/check";
+import SimpleSchema from "simpl-schema";
 import { TransactionsCollections } from "./TransactionsCollections";
 
 Meteor.methods({
 
-    'transactions.insert'({
-        isTransferring,
-        sourceWalletId,
-        destinationWalledId,
-        amount
-    }) {
+    'transactions.insert'(args) {
 
-        check(isTransferring, Boolean);
-        check(sourceWalletId, String);
-        check(destinationWalledId, String);
-        check(amount, Number);
+        const shema = new SimpleSchema(
+            {
 
-        if (!amount || amount <= 0) {
-            throw new Meteor.Error("Amount is requerit");
-        }
-        if (!sourceWalletId) {
-            throw new Meteor.Error("Source Wallet is requerit");
-        }
-        if (!destinationWalledId && !isTransferring) {
-            throw new Meteor.Error("Destination Walled is requerit");
-        }
+                isTransferring: {
+                    type: Boolean,
+                },
+                sourceWalletId: {
+                    type: String,
+                },
+                destinationWalledId: {
+                    type: String,
+                    optional: !args.isTransferring,
+                },
+                amount: {
+                    type: Number,
+                    min: 1,
+                },
+            }
+        );
 
+        const cleanArgs = shema.clean(args);
+        shema.validate(cleanArgs);
+
+        const { isTransferring, sourceWalletId, destinationWalledId, amount } = args;
 
         return TransactionsCollections.insert({
             type: isTransferring ? 'TRANSFER' : 'ADD',
