@@ -1,15 +1,17 @@
 import React from 'react';
-import { ContactFrom } from './ContactFrom';
-import { ContactList } from './ContactList';
-import { Headerss } from './component/Header';
-import { Wallet } from './Wallet';
+import { BrowserRouter } from 'react-router-dom';
+import { Headerss } from './component/Header.jsx';
+import { Router } from './Router.jsx';
 
-//contacto: nombre, email, imgenUrl
+
+// contacto: nombre, email, imgenUrl
 export const App = () => (
-  <div>
-    <Headerss/>
-    <Wallet/>
-    <ContactFrom/>
-    <ContactList/>
-  </div>
+  <BrowserRouter>
+    <div>
+      <Headerss />
+      <div>
+        <Router />
+      </div>
+    </div>
+  </BrowserRouter>
 );

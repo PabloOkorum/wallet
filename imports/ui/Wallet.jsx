@@ -1,14 +1,13 @@
-import { Meteor } from 'meteor/meteor'
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Modal } from './component/Modal';
-import { SelectContact } from './component/SelectContact';
+import { Modal } from './component/Modal.jsx';
+import { SelectContact } from './component/SelectContact.jsx';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
-import { Loading } from './component/Loading';
+import { Loading } from './component/Loading.jsx';
 import { WalletsCollection } from '../api/collections/WalletsCollection';
 import { ContactsCollection } from '../api/collections/ContactsCollection';
 
 export const Wallet = () => {
-
     const isLoadingContacts = useSubscribe('contacts');
     const isLoadingWallets = useSubscribe('wallets');
 
@@ -24,35 +23,32 @@ export const Wallet = () => {
     const [isTransferring, setIsTransferring] = React.useState(false);
     const [amount, setAmount] = React.useState(0);
     const [destinationWallet, setAdestinationWallet] = React.useState({});
-    const [errormenssage, setErrormenssage] = React.useState("");
+    const [errormenssage, setErrormenssage] = React.useState('');
 
     const addTransaction = () => {
-
         Meteor.call(
             'transactions.insert',
             {
                 isTransferring,
                 sourceWalletId: wallet._id,
-                destinationWalletId: destinationWallet?.walletId || "",
+                destinationWalletId: destinationWallet?.walletId || '',
                 amount: Number(amount),
             },
             (errorResponse) => {
-               
                 if (errorResponse) {
-
+                    // eslint-disable-next-line no-unused-expressions
                     errorResponse.details?.forEach((error) => {
                         setErrormenssage(error.message);
                     });
-
                 } else {
                     setOpen(false);
                     setAdestinationWallet({});
                     setAmount(0);
-                    setErrormenssage("");
+                    setErrormenssage('');
                 }
             }
-        )
-    }
+        );
+    };
 
     if (isLoadingContacts() || isLoadingWallets()) {
         return <Loading />;
@@ -88,11 +84,11 @@ export const Wallet = () => {
 
                             <div>
                                 <button
-                                    type='button'
+                                    type="button"
                                     onClick={() => {
                                         setIsTransferring(false);
                                         setOpen(true);
-                                        setErrormenssage("");
+                                        setErrormenssage('');
                                     }}
                                 >
                                     add money
@@ -100,10 +96,10 @@ export const Wallet = () => {
                                 </button>
 
                                 <button
-                                    type='button'
+                                    type="button"
                                     onClick={() => {
                                         setIsTransferring(true);
-                                        setErrormenssage("");
+                                        setErrormenssage('');
                                         setOpen(true);
                                     }}
                                 >
@@ -138,7 +134,7 @@ export const Wallet = () => {
                         )}
 
                         <div>
-                            <label htmlFor='amount'>
+                            <label htmlFor="amount">
                                 Amount
                             </label>
 
@@ -148,17 +144,16 @@ export const Wallet = () => {
                                 min={0}
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="0.00"
-                            >
-                            </input>
+                             />
                         </div>
                     </>
                 }
                 footer={
                     <button
-                        type='button'
+                        type="button"
                         onClick={addTransaction}
                     >
-                        {isTransferring ? "transfer" : "add"}
+                        {isTransferring ? 'transfer' : 'add'}
                     </button>
                 }
                 errorMessage={errormenssage}
@@ -166,6 +161,5 @@ export const Wallet = () => {
             />
 
         </>
-    )
-
-}
+    );
+};

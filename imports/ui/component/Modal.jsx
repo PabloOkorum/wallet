@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react';
-import { Dialog, Transition } from "@headlessui/react";
+import { Transition } from '@headlessui/react';
 
-export const Modal = ({ open, setOpen, title, body, footer, errorMessage }) => {
-
-    return (
+export const Modal = ({ open, title, body, footer, errorMessage }) => (
         <Transition.Root show={open} as={Fragment}>
             <Transition.Child>
                 <div>
@@ -18,5 +16,4 @@ export const Modal = ({ open, setOpen, title, body, footer, errorMessage }) => {
         </Transition.Root>
 
 
-    )
-}
+    );
