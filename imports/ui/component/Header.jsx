@@ -17,7 +17,7 @@ export const Headerss = () => {
             <div>
                 {!isLoadingLoggedUser && !loggedUser && (
                     <button
-                        onClick={() => navigate(RoutePath.SIGN_UP)} >
+                        onClick={() => navigate(RoutePath.ACCESS)} >
                         sing up'
                     </button>
                 )}

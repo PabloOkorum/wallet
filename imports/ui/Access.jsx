@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from './RoutePath.jsx';
 import { ErrorAlert } from './component/Error.jsx';
 
-export const SingUp = () => {
+export const Access = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState();
+    const [isSignUp, setIsSignUp] = useState(true);
+
     const singUp = (e) => {
         e.preventDefault();
         Accounts.createUser({ email, password }, (errorResponse) => {
@@ -20,9 +23,22 @@ export const SingUp = () => {
         });
     };
 
+    const singIn = (e) => {
+        e.preventDefault();
+        Meteor.loginWithPassword(email, password, (errorResponse) => {
+            if (errorResponse) {
+                setError(errorResponse);
+                console.log('Error  singing in the user');
+                return;
+            }
+            navigate(RoutePath.HOME);
+        });
+    };
+
     return (
         <>
-        {error && <ErrorAlert message={error.reason || 'Unknown error'}/>}
+            <h3>{isSignUp ? 'Sing up' : 'Sing In'}</h3>
+            {error && <ErrorAlert message={error.reason || 'Unknown error'} />}
             <div>
                 <div>
                     <label htmlFor="email">
@@ -49,15 +65,37 @@ export const SingUp = () => {
             </div>
 
             <div>
+                {
+                    isSignUp &&
+                    <button
+                        onClick={singIn}
+                        type="submit"
+                    >
+                        sing Up
+                    </button>
+                }
+                {
+                    !isSignUp &&
+                    <button
+                        onClick={singIn}
+                        type="submit"
+                    >
+                        sing In
+                    </button>
+                }
+
                 <button
-                 onClick={singUp}
-                 type="submit"
-                 >
-                    submit
-                </button>
-                <button onClick={() => navigate(RoutePath.HOME)}>
+                    onClick={() => navigate(RoutePath.HOME)}>
                     Back to home
                 </button>
+
+                <div>
+                    <a
+                        onClick={() => setIsSignUp(!isSignUp)} >
+                     {isSignUp ?   'If you already have an account, click here ':' If you do not have an account, click here' }
+                    </a>
+                </div>
+
             </div>
         </>
     );
