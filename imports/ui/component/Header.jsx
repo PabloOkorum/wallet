@@ -5,7 +5,6 @@ import { RoutePath } from '../RoutePath.jsx';
 import { useLoggedUser } from 'meteor/quave:logged-user-react';
 
 export const Headerss = () => {
-
     const { loggedUser, isLoadingLoggedUser } = useLoggedUser();
     const navigate = useNavigate();
 

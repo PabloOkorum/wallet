@@ -28,6 +28,7 @@ export const Access = () => {
         Meteor.loginWithPassword(email, password, (errorResponse) => {
             if (errorResponse) {
                 setError(errorResponse);
+                // eslint-disable-next-line no-console
                 console.log('Error  singing in the user');
                 return;
             }
@@ -68,7 +69,7 @@ export const Access = () => {
                 {
                     isSignUp &&
                     <button
-                        onClick={singIn}
+                        onClick={singUp}
                         type="submit"
                     >
                         sing Up
@@ -92,9 +93,13 @@ export const Access = () => {
                 <div>
                     <a
                         onClick={() => setIsSignUp(!isSignUp)} >
-                     {isSignUp ?   'If you already have an account, click here ':' If you do not have an account, click here' }
+                     {isSignUp ? 'If you already have an account, click here ' : ' If you do not have an account, click here' }
                     </a>
                 </div>
+                <button
+                    onClick={() => navigate(RoutePath.FORGOT_PASSWORD)}>
+                    Forgot password
+                </button>
 
             </div>
         </>
