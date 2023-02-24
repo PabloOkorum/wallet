@@ -6,10 +6,13 @@ import { useSubscribe, useFind } from 'meteor/react-meteor-data';
 import { Loading } from './component/Loading.jsx';
 import { WalletsCollection } from '../api/collections/WalletsCollection';
 import { ContactsCollection } from '../api/collections/ContactsCollection';
+import { useLoggedUser } from 'meteor/quave:logged-user-react';
+
 
 export const Wallet = () => {
-    const isLoadingContacts = useSubscribe('contacts');
-    const isLoadingWallets = useSubscribe('wallets');
+    const { loggedUser } = useLoggedUser();
+    const isLoadingContacts = useSubscribe('myContacts');
+    const isLoadingWallets = useSubscribe('myWallets');
 
     const contacts = useFind(() =>
         ContactsCollection.find(
@@ -22,7 +25,7 @@ export const Wallet = () => {
     const [open, setOpen] = React.useState(false);
     const [isTransferring, setIsTransferring] = React.useState(false);
     const [amount, setAmount] = React.useState(0);
-    const [destinationWallet, setAdestinationWallet] = React.useState({});
+    const [destinationContacs, setAdestinationContacs] = React.useState({});
     const [errormenssage, setErrormenssage] = React.useState('');
 
     const addTransaction = () => {
@@ -31,7 +34,7 @@ export const Wallet = () => {
             {
                 isTransferring,
                 sourceWalletId: wallet._id,
-                destinationWalletId: destinationWallet?.walletId || '',
+                destinationContacsId: destinationContacs?.walletId || '',
                 amount: Number(amount),
             },
             (errorResponse) => {
@@ -42,7 +45,7 @@ export const Wallet = () => {
                     });
                 } else {
                     setOpen(false);
-                    setAdestinationWallet({});
+                    setAdestinationContacs({});
                     setAmount(0);
                     setErrormenssage('');
                 }
@@ -54,6 +57,14 @@ export const Wallet = () => {
         return <Loading />;
     }
 
+
+    const email = () => {
+        if (Array.isArray(loggedUser?.email)) {
+            return loggedUser.email[0].address;
+        }
+        return loggedUser?.email || '';
+    };
+
     return (
         <>
             <div className="divWallet">
@@ -63,13 +74,19 @@ export const Wallet = () => {
                         <div className="tituloWallet">
                             Main account
                         </div>
+                        <div className="subtituloWallet">
+                            EMAIL:
+                        </div>
 
+                        <h1 className="idWallet">
+                            {email()}
+                        </h1>
                         <div className="subtituloWallet">
                             Wallet ID:
                         </div>
 
                         <h1 className="idWallet">
-                            {wallet._id}
+                            {wallet?._id}
                         </h1>
 
                         <div className="balanceWallet">
@@ -126,8 +143,8 @@ export const Wallet = () => {
                             <div>
                                 <SelectContact
                                     title="Destination Contact"
-                                    setContact={setAdestinationWallet}
-                                    contact={destinationWallet}
+                                    setContact={setAdestinationContacs}
+                                    contact={destinationContacs}
                                     contacts={contacts}
                                 />
                             </div>
@@ -144,7 +161,7 @@ export const Wallet = () => {
                                 min={0}
                                 onChange={(e) => setAmount(e.target.value)}
                                 placeholder="0.00"
-                             />
+                            />
                         </div>
                     </>
                 }

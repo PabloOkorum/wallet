@@ -26,6 +26,11 @@ const ContactsShema = new SimpleSchema({
         type: Date,
 
     },
+    userId: {
+
+        type: String,
+
+    },
     archived: {
         type: Boolean,
         defaultValue: false,

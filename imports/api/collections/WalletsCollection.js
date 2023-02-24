@@ -18,6 +18,9 @@ const WalletsShema = new SimpleSchema({
     createdAt: {
         type: Date,
     },
+    userId: {
+        type: String,
+    },
 });
 
 WalletsCollection.attachSchema(WalletsShema);

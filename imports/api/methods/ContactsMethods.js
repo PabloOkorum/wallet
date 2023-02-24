@@ -4,6 +4,10 @@ import { ContactsCollection } from '../collections/ContactsCollection';
 
 Meteor.methods({
     'contacts.insert'({ name, email, imgenUrl, walletId }) {
+        const { userId } = this;
+
+        if (!userId) { throw Meteor.Error('Access denied'); }
+
         check(name, String);
         check(email, String);
         check(imgenUrl, String);
@@ -26,11 +30,13 @@ Meteor.methods({
             imgenUrl,
             walletId,
             createdAt: new Date(),
+            userId,
         });
     },
 
     'contacts.remove'({ contactId }) {
         check(contactId, String);
+        // eslint-disable-next-line no-console
         console.log(
             ` contacto id: ${contactId} 
         \n
