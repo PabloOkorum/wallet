@@ -34,7 +34,7 @@ Meteor.startup(() => {
     if (!settings.googleClientId || !settings.googleSecret) {
         throw new Error('googleClientId and googleSecret are requierd');
     }
-   Accounts.config({ restrictCreationByEmailDomain: 'okorum.com' });
+  // Accounts.config({ restrictCreationByEmailDomain: 'okorum.com' });
     ServiceConfiguration.configurations.upsert({
         service: 'google',
     }, {
