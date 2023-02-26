@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { ErrorAlert } from './component/Error.jsx';
 import { SuccesAlert } from './component/SuccesAlert.jsx';
+import { Alert, Button, Container, TextField } from '@mui/material';
+
 
 export const ContactFrom = () => {
     // funciones
@@ -42,58 +44,74 @@ export const ContactFrom = () => {
     };
 
     return (
-        <form>
-            {error && <ErrorAlert message={error} />}
-            {success && <SuccesAlert message={success} />}
-
+        <Container
+            component="main"
+            maxWidth="sm"
+        >
+            {error && <Alert severity="error">{error}</Alert>}
+            {success && <Alert severity="success">{success} </Alert>}
+            <h1
+                className="idWallet">
+                Agregar Contacto
+            </h1>
             <div>
-                <label htmlFor="name" >
-                    name
-                </label>
-                <input
+                <TextField
+                    sx={{ mr: 5 }}
+                    label="Name"
+                    variant="standard"
                     id="name"
                     onChange={(e) => setName(e.target.value)}
                     type="text"
                     value={name} />
-            </div>
 
-            <div>
-                <label htmlFor="email">
-                    email
-                </label>
-                <input
+                <TextField
+                    sx={{ mr: 5 }}
+                    label="Email"
+                    variant="standard"
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     value={email} />
             </div>
+            <br />
 
             <div>
-                <label htmlFor="imgenUrl">
-                    imgenUrl
-                </label>
-                <input
+                <TextField
+                    sx={{ mr: 5 }}
+                    label="imgenUrl"
+                    variant="standard"
                     id="imgenUrl"
                     onChange={(e) => setImgenUrl(e.target.value)}
                     type="text"
                     value={imgenUrl} />
-            </div>
 
-            <div>
-                <label htmlFor="walletId">
-                    wallet Id
-                </label>
-                <input
+                <TextField
+                    sx={{ mr: 5 }}
+                    label="Wallet Id"
+                    variant="standard"
                     id="walletId"
                     onChange={(e) => setWalletId(e.target.value)}
                     type="text"
                     value={walletId} />
             </div>
+            <br />
 
             <div>
-                <button type="button" onClick={saveContact}> Save contacts</button>
+                <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    ariant="contained"
+                    type="button"
+                    sx={{ mt: 1, mb: 5 }}
+                    onClick={saveContact}
+                >
+                    Save contacts
+                </Button>
             </div>
 
-        </form>
+        </Container >
     );
 };
+
+

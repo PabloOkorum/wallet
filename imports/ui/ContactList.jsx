@@ -3,6 +3,9 @@ import { ContactsCollection } from '../api/collections/ContactsCollection';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
 import { Loading } from './component/Loading.jsx';
 import { Meteor } from 'meteor/meteor';
+import { Avatar, Box, Button, ButtonGroup, Container, List, ListItemAvatar, ListItemText } from '@mui/material';
+
+
 
 
 export const ContactList = () => {
@@ -37,34 +40,63 @@ export const ContactList = () => {
 
     const ContactItem = memo(({ contact }) => (
 
-            <li > {contact.imageUrl && (<div><img src={contact.imageUrl} /></div>)}
-                {contact.name} - {contact.email} - {contact.walletId} -
+        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>{contact.imageUrl && (
+            <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src={contact.imageUrl} />
+            </ListItemAvatar>
 
-                <a
-                    href="#"
-                    onClick={(event) => removeContact(event, contact._id)}
+        )}
+            <Box sx={{ p: 2, border: '1px dashed grey' }}>
+
+
+                <ListItemText
+                    primary={contact.name}
+                    secondary={
+                        <React.Fragment>
+                            {contact.email} - {contact.walletId}
+                        </React.Fragment>
+                    }
+                />
+
+                <ButtonGroup
+                    variant="text"
+                    aria-label="text button group"
                 >
-                    remove
-                </a>
-                - -
-                <a
-                    href="#"
-                    onClick={(event) => archiveContact(event, contact._id)}
-                >
-                    archive
-                </a>
-                -
-            </li>
-        ));
+
+                    <Button
+                        color="error"
+                        href="#"
+                        onClick={(event) => removeContact(event, contact._id)}
+                    >
+                        remove
+                    </Button>
+                    <br />
+                    <Button
+                        color="success"
+                        href="#"
+                        onClick={(event) => archiveContact(event, contact._id)}
+                    >
+                        archive
+                    </Button>
+                </ButtonGroup>
+            </Box>
+
+        </List>
+    ));
 
     // retorno forma como se vera
     return (
-        <>
+        <Container
+            component="main"
+            maxWidth="sm"
+        >
 
-            <h3>Contact List</h3>
+            <h2>Contact List</h2>
+
             {contacts.map(contact => (
                 <ContactItem key={contact._id} contact={contact} />
             ))}
-        </>
+
+        </Container>
     );
 };

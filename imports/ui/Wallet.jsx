@@ -7,6 +7,9 @@ import { Loading } from './component/Loading.jsx';
 import { WalletsCollection } from '../api/collections/WalletsCollection';
 import { ContactsCollection } from '../api/collections/ContactsCollection';
 import { useLoggedUser } from 'meteor/quave:logged-user-react';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import { Box, ButtonGroup, TextField } from '@mui/material';
 
 
 export const Wallet = () => {
@@ -66,117 +69,149 @@ export const Wallet = () => {
     };
 
     return (
-        <>
-            <div className="divWallet">
-                <form className="fromWallet">
-                    <div className="infoWallet">
+        <Container
+            component="main"
+            maxWidth="xs"
+        >
+            <Box
+                sx={{
+                    p: 2,
+                    border: '1px dashed grey',
+                }}
+            >
 
-                        <div className="tituloWallet">
-                            Main account
-                        </div>
-                        <div className="subtituloWallet">
-                            EMAIL:
-                        </div>
+                <div className="divWallet">
+                    <form className="fromWallet">
+                        <div className="infoWallet">
 
-                        <h1 className="idWallet">
-                            {email()}
-                        </h1>
-                        <div className="subtituloWallet">
-                            Wallet ID:
-                        </div>
+                            <h1>
+                                Main account
+                            </h1>
+                            <dr />
+                            <dr />
+                            <div className="subtituloWallet">
+                                <h2>
+                                    EMAIL:
+                                </h2>
 
-                        <h1 className="idWallet">
-                            {wallet?._id}
-                        </h1>
+                                <h3 className="idWallet">
+                                    {email()}
+                                </h3>
+                            </div>
+                            <div className="subtituloWallet">
+                                <h2>
+                                    Wallet ID:
+                                </h2>
 
-                        <div className="balanceWallet">
-                            ${wallet.balance} ${wallet.currency}
-                        </div>
+                                <h3 className="idWallet">
+                                    {wallet?._id}
+                                </h3>
+                            </div>
 
-                    </div>
-
-
-                    <div className="divBotton">
-                        <div className="flex-auto flex space-x-4">
-
-                            <div>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setIsTransferring(false);
-                                        setOpen(true);
-                                        setErrormenssage('');
-                                    }}
-                                >
-                                    add money
-
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setIsTransferring(true);
-                                        setErrormenssage('');
-                                        setOpen(true);
-                                    }}
-                                >
-                                    Transfer money
-                                </button>
+                            <div className="balanceWallet">
+                                <h2>
+                                    ${wallet.balance}
+                                    ${wallet.currency}
+                                </h2>
                             </div>
 
                         </div>
-                    </div>
+                        <br />
 
-                </form>
-            </div>
+                        <div className="divBotton">
+                            <div className="flex-auto flex space-x-4">
 
-            <Modal
-                open={open}
-                setOpen={setOpen}
-                title={
-                    isTransferring ? 'Transfer money to other wallet' : 'Add money to your wallet'
-                }
-                body={
-                    <>
+                                <ButtonGroup
+                                    variant="text"
+                                    aria-label="text button group"
+                                >
 
-                        {isTransferring && (
+                                    <Button
+                                        color="success"
+                                        onClick={() => {
+                                            setIsTransferring(false);
+                                            setOpen(true);
+                                            setErrormenssage('');
+                                        }}
+                                    >
+                                        add money
+
+                                    </Button>
+
+                                    <Button
+                                        color="success"
+                                        onClick={() => {
+                                            setIsTransferring(true);
+                                            setErrormenssage('');
+                                            setOpen(true);
+                                        }}
+                                    >
+                                        Transfer money
+                                    </Button>
+                                </ButtonGroup>
+
+                            </div>
+                        </div>
+
+                    </form>
+                </div >
+
+                <Modal
+                    open={open}
+                    setOpen={setOpen}
+                    title={
+                        <h1>
+                            <React.Fragment>
+                                {isTransferring ? 'Transfer money to other wallet' : 'Add money to your wallet'}
+                            </React.Fragment>
+                        </h1>
+                    }
+                    body={
+                        <>
+                            <br />
+                            {isTransferring && (
+                                <div>
+                                    <h3>Destination Contact</h3>
+                                    <SelectContact
+                                        title=""
+                                        setContact={setAdestinationContacs}
+                                        contact={destinationContacs}
+                                        contacts={contacts}
+                                    />
+                                </div>
+                            )}
+
                             <div>
-                                <SelectContact
-                                    title="Destination Contact"
-                                    setContact={setAdestinationContacs}
-                                    contact={destinationContacs}
-                                    contacts={contacts}
+
+                                <TextField
+                                    sx={{ mr: 5 }}
+                                    label="Amount"
+                                    variant="standard"
+                                    type="number"
+                                    value={amount}
+                                    min={0}
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    placeholder="0.00"
                                 />
                             </div>
-                        )}
+                            <br />
+                        </>
+                    }
+                    footer={
+                        <Button
+                            variant="contained"
+                            color="success"
+                            size="small"
+                            type="button"
+                            onClick={addTransaction}
+                        >
+                            {isTransferring ? 'transfer' : 'add'}
+                        </Button>
+                    }
+                    errorMessage={errormenssage}
 
-                        <div>
-                            <label htmlFor="amount">
-                                Amount
-                            </label>
-
-                            <input
-                                type="number"
-                                value={amount}
-                                min={0}
-                                onChange={(e) => setAmount(e.target.value)}
-                                placeholder="0.00"
-                            />
-                        </div>
-                    </>
-                }
-                footer={
-                    <button
-                        type="button"
-                        onClick={addTransaction}
-                    >
-                        {isTransferring ? 'transfer' : 'add'}
-                    </button>
-                }
-                errorMessage={errormenssage}
-
-            />
-
-        </>
+                />
+            </Box>
+        </Container >
     );
 };

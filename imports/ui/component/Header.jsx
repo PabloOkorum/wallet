@@ -3,6 +3,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RoutePath } from '../RoutePath.jsx';
 import { useLoggedUser } from 'meteor/quave:logged-user-react';
+import Button from '@mui/material/Button';
+
 
 export const Headerss = () => {
     const { loggedUser, isLoadingLoggedUser } = useLoggedUser();
@@ -11,21 +13,29 @@ export const Headerss = () => {
     return (
         <header>
             <div>
-                <a onClick={() => navigate(RoutePath.HOME)}>Welcome to wallet!</a>
+                <a onClick={() => navigate(RoutePath.HOME)}>
+
+                    Welcome to wallet!
+
+                </a>
             </div>
             <div>
                 {!isLoadingLoggedUser && !loggedUser && (
-                    <button
+                    <Button
+                        color="success"
+                        variant="contained"
                         onClick={() => navigate(RoutePath.ACCESS)} >
                         sing up'
-                    </button>
+                    </Button>
                 )}
 
                 {!isLoadingLoggedUser && loggedUser && (
-                    <button
+                    <Button
+                        color="error"
+                        variant="contained"
                         onClick={() => Meteor.logout()} >
                         log out'
-                    </button>
+                    </Button>
                 )}
             </div>
         </header>
