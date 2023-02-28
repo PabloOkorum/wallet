@@ -71,12 +71,17 @@ export const Wallet = () => {
     return (
         <Container
             component="main"
-            maxWidth="xs"
+            maxWidth="md"
         >
             <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
                 sx={{
                     p: 2,
-                    border: '1px dashed grey',
+                    border: '1px solid grey',
+                    alignItems: 'center',
+
                 }}
             >
 
@@ -87,8 +92,7 @@ export const Wallet = () => {
                             <h1>
                                 Main account
                             </h1>
-                            <dr />
-                            <dr />
+                            <br />
                             <div className="subtituloWallet">
                                 <h2>
                                     EMAIL:
@@ -160,6 +164,7 @@ export const Wallet = () => {
                     open={open}
                     setOpen={setOpen}
                     title={
+                        
                         <h1>
                             <React.Fragment>
                                 {isTransferring ? 'Transfer money to other wallet' : 'Add money to your wallet'}

@@ -35,6 +35,42 @@ const ContactsShema = new SimpleSchema({
         type: Boolean,
         defaultValue: false,
     },
+
+    logs: {
+        type: Array,
+        optional: true,
+    },
+    'logs.$': {
+        type: Object,
+    },
+    'logs.$.userUpdate': {
+        type: String,
+    },
+    'logs.$.modificAt': {
+        type: Date,
+    },
+    'logs.$.accionUpdate': {
+        type: String,
+    },
+
 });
 
 ContactsCollection.attachSchema(ContactsShema);
+
+// userUpdate: {
+//     type: String,
+//     optional: true,
+// },
+// modificAt: {
+//     type: Date,
+//     optional: true,
+// },
+// userId: {
+//     type: String,
+//     optional: true,
+// },
+// accionUpdate: {
+//     type: String,
+//     optional: true,
+//     defaultValue: 'crear',
+// },

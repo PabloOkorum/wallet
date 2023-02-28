@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { Meteor } from 'meteor/meteor';
-import { ErrorAlert } from './component/Error.jsx';
-import { SuccesAlert } from './component/SuccesAlert.jsx';
-import { Alert, Button, Container, TextField } from '@mui/material';
+import { Alert, Button, Grid, TextField } from '@mui/material';
 
 
 export const ContactFrom = () => {
@@ -33,7 +31,7 @@ export const ContactFrom = () => {
     };
 
     const saveContact = () => {
-        Meteor.call('contacts.insert', { name, email, imgenUrl, walletId },
+        Meteor.call('contacts.insert', { name, email, imgenUrl, walletId, accion: 'crearContacto' },
             (errorResponse) => {
                 if (errorResponse) {
                     showError({ message: errorResponse.error });
@@ -44,19 +42,42 @@ export const ContactFrom = () => {
     };
 
     return (
-        <Container
+        <Grid
+            container
             component="main"
-            maxWidth="sm"
+            maxWidth="l"
         >
-            {error && <Alert severity="error">{error}</Alert>}
-            {success && <Alert severity="success">{success} </Alert>}
-            <h1
-                className="idWallet">
-                Agregar Contacto
-            </h1>
-            <div>
+
+            <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+            >
+                <h1
+                    className="idWallet">
+                    Agregar Contacto
+                </h1>
+            </Grid>
+
+            <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+            >
+                {error && <Alert severity="error">{error}</Alert>}
+                {success && <Alert severity="success">{success} </Alert>}
+            </Grid>
+
+            <Grid
+                item
+                xs={14}
+                container
+                justifyContent="center"
+            >
                 <TextField
-                    sx={{ mr: 5 }}
+                    sx={{ mr: 10 }}
                     label="Name"
                     variant="standard"
                     id="name"
@@ -65,19 +86,26 @@ export const ContactFrom = () => {
                     value={name} />
 
                 <TextField
-                    sx={{ mr: 5 }}
+                    sx={{ mr: 0 }}
                     label="Email"
                     variant="standard"
                     id="email"
                     onChange={(e) => setEmail(e.target.value)}
                     type="email"
                     value={email} />
-            </div>
+
+            </Grid>
+
             <br />
 
-            <div>
+            <Grid
+                item
+                xs={14}
+                container
+                justifyContent="center"
+            >
                 <TextField
-                    sx={{ mr: 5 }}
+                    sx={{ mr: 10 }}
                     label="imgenUrl"
                     variant="standard"
                     id="imgenUrl"
@@ -86,18 +114,24 @@ export const ContactFrom = () => {
                     value={imgenUrl} />
 
                 <TextField
-                    sx={{ mr: 5 }}
+                    sx={{ mr: 0 }}
                     label="Wallet Id"
                     variant="standard"
                     id="walletId"
                     onChange={(e) => setWalletId(e.target.value)}
                     type="text"
                     value={walletId} />
-            </div>
+            </Grid>
             <br />
 
-            <div>
+            <Grid
+                item
+                xs={12}
+                container
+                justifyContent="center"
+            >
                 <Button
+                    display="flex"
                     variant="contained"
                     color="success"
                     size="small"
@@ -108,10 +142,8 @@ export const ContactFrom = () => {
                 >
                     Save contacts
                 </Button>
-            </div>
+            </Grid>
 
-        </Container >
+        </Grid >
     );
 };
-
-

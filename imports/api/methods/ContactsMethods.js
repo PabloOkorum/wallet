@@ -3,7 +3,7 @@ import { check } from 'meteor/check';
 import { ContactsCollection } from '../collections/ContactsCollection';
 
 Meteor.methods({
-    'contacts.insert'({ name, email, imgenUrl, walletId }) {
+    'contacts.insert'({ name, email, imgenUrl, walletId, accion }) {
         const { userId } = this;
 
         if (!userId) { throw Meteor.Error('Access denied'); }
@@ -31,6 +31,11 @@ Meteor.methods({
             walletId,
             createdAt: new Date(),
             userId,
+            logs: [{
+                userUpdate: userId,
+                modificAt: new Date(),
+                accionUpdate: accion,
+            }],
         });
     },
 
@@ -48,4 +53,51 @@ Meteor.methods({
         check(contactId, String);
         ContactsCollection.update({ _id: contactId }, { $set: { archived: true } });
     },
+
+    'contacts.update'({ contactName, contactEmail, contactWalletId, contactId, accion }) {
+        const { userId } = this;
+
+        if (!userId) { throw Meteor.Error('Access denied'); }
+
+        check(contactName, String);
+        check(contactEmail, String);
+        check(contactWalletId, String);
+
+        if (!contactName) {
+            throw new Meteor.Error('Name is required');
+        }
+        if (!contactEmail) {
+            throw new Meteor.Error('email is required');
+        }
+
+        if (!contactWalletId) {
+            throw new Meteor.Error('wallet ID is required');
+        }
+
+        if (!contactId) {
+            throw new Meteor.Error(' contactId is required ');
+        }
+
+        ContactsCollection.update(
+            {
+                _id: contactId,
+
+            }, {
+            $push: {
+                logs: {
+                    userUpdate: userId,
+                    modificAt: new Date(),
+                    accionUpdate: accion,
+                },
+
+            },
+            $set: {
+                archived: false,
+                name: contactName,
+                email: contactEmail,
+                walletId: contactWalletId,
+            },
+        });
+    },
+
 });
