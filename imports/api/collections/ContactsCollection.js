@@ -11,7 +11,7 @@ const ContactsShema = new SimpleSchema({
     email: {
         type: String,
     },
-    imageURL: {
+    imgenUrl: {
 
         type: String,
         optional: true,

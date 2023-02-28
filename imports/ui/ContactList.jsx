@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ContactsCollection } from '../api/collections/ContactsCollection';
 import { useSubscribe, useFind } from 'meteor/react-meteor-data';
 import { Loading } from './component/Loading.jsx';
 import { Meteor } from 'meteor/meteor';
-import { Alert, Avatar, Box, Button, ButtonGroup, Container, List, ListItemAvatar, ListItemText, TextField } from '@mui/material';
+import { Alert, Avatar, Box, Button, ButtonGroup, Container, List, ListItemText, TextField } from '@mui/material';
+import { Modal } from './component/Modal.jsx';
 
 
 export const ContactList = () => {
     const isLoading = useSubscribe('myContacts');
+
     const contacts = useFind(() =>
         ContactsCollection.find(
             {},
@@ -24,8 +26,10 @@ export const ContactList = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [walletId, setWalletId] = useState('');
+    const [open, setOpen] = React.useState(false);
 
-   // useEffect(), useFind, useState
+
+    // useEffect(), useFind, useState
 
     const showError = ({ message }) => {
         setError(message);
@@ -47,7 +51,7 @@ export const ContactList = () => {
             contactName: name,
             contactEmail: email,
             contactWalletId: walletId,
-            accion: 'update',
+            accion: 'update contact',
         },
             (errorResponse) => {
                 if (errorResponse) {
@@ -59,19 +63,30 @@ export const ContactList = () => {
                     setEmail('');
                     setName('');
                     setWalletId('');
+                    setOpen(false);
                 }
             });
+    };
+    const cancelUpdateContact = (event) => {
+        event.preventDefault();
+        saveSuccess({ message: 'cancel update' });
+        setIsUpdate(false);
+        setIdContactUpdate('');
+        setEmail('');
+        setName('');
+        setWalletId('');
+        setOpen(false);
     };
 
     const updateContact = (event, contact) => {
         const { _id: id, name: nameChange, email: emailChange, walletId: walletIdChange } = contact;
-
         event.preventDefault();
         setIsUpdate(true);
         setEmail(emailChange);
         setName(nameChange);
         setWalletId(walletIdChange);
         setIdContactUpdate(id);
+        setOpen(true);
     };
 
     //
@@ -94,11 +109,8 @@ export const ContactList = () => {
 
     const prueba = (e) => {
         e.preventDefault();
-        console.log(e.target.value);
-        console.log(name);
-        setName(e.target.value);
-        console.log(name);
 
+        setName(e.target.value);
     };
 
     if (isLoading()) {
@@ -107,20 +119,16 @@ export const ContactList = () => {
 
     const ContactItem = ({ contact }) => (
 
-        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>{contact.imageUrl && (
-            <ListItemAvatar>
-                <Avatar alt="Remy Sharp" src={contact.imageUrl} />
-            </ListItemAvatar>
+        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
 
-        )}
-            <Box
-                sx={{
-                    p: 2,
-                    border: '1px dashed grey',
-                }}
-            >
-
-                {!isUpdate && (
+            {!isUpdate && (
+                <Box
+                    sx={{
+                        p: 2,
+                        border: '1px dashed grey',
+                    }}
+                >
+                    <Avatar alt="Remy Sharp" src={contact.imgenUrl} />
                     <ListItemText
                         primary={contact.name}
                         secondary={
@@ -130,10 +138,70 @@ export const ContactList = () => {
                         }
                     />
 
-                )}
 
-                {idContactUpdate == contact._id && (
+                    <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                    >
+
+                        <>
+                            <Button
+                                color="error"
+                                href="#"
+                                onClick={(event) => removeContact(event, contact._id)}
+                            >
+                                remove
+                            </Button>
+                            <br />
+                            <Button
+                                color="success"
+                                href="#"
+                                onClick={(event) => archiveContact(event, contact._id)}
+                            >
+                                archive
+                            </Button>
+                        </>
+
+                        <br />
+
+                        <Button
+                            color="success"
+                            href="#"
+                            onClick={(event) => updateContact(event, contact)}
+                        >
+                            update
+                        </Button>
+
+                    </ButtonGroup>
+                </Box>
+            )}
+
+        </List >
+    );
+
+    // retorno forma como se vera
+    return (
+
+        <Container
+            component="main"
+            maxWidth="sm"
+        >
+
+            <h2>Contact List</h2>
+            {error && <Alert severity="error">{error}</Alert>}
+            {success && <Alert severity="success">{success} </Alert>}
+            <Modal
+                open={open}
+                setOpen={setOpen}
+                title={
+
+                    <h1>
+                        update Contact
+                    </h1>
+                }
+                body={
                     <>
+
                         <TextField
                             sx={{ mr: 10 }}
                             label="Name"
@@ -161,69 +229,31 @@ export const ContactList = () => {
                             type="text"
                             value={walletId} />
                     </>
-                )}
-
-                <ButtonGroup
-                    variant="text"
-                    aria-label="text button group"
-                >
-                    {!isUpdate && (
-                        <>
-                            <Button
-                                color="error"
-                                href="#"
-                                onClick={(event) => removeContact(event, contact._id)}
-                            >
-                                remove
-                            </Button>
-                            <br />
-                            <Button
-                                color="success"
-                                href="#"
-                                onClick={(event) => archiveContact(event, contact._id)}
-                            >
-                                archive
-                            </Button>
-                        </>
-                    )}
-                    <br />
-                    {!isUpdate && (
+                }
+                footer={
+                    <ButtonGroup
+                        variant="text"
+                        aria-label="text button group"
+                    >
                         <Button
                             color="success"
                             href="#"
-                            onClick={(event) => updateContact(event, contact)}
-                        >
-                            update
-                        </Button>
-                    )}
-
-                    {isUpdate && idContactUpdate == contact._id && (
-                        <Button
-                            color="success"
-                            href="#"
-                            onClick={(event) => saveUpdateContact(event, contact._id)}
+                            onClick={(event) => saveUpdateContact(event, idContactUpdate)}
                         >
                             save
                         </Button>
-                    )}
-                </ButtonGroup>
-            </Box>
+                        <Button
+                            color="error"
+                            href="#"
+                            onClick={(event) => cancelUpdateContact(event)}
+                        >
+                            cancel
+                        </Button>
+                    </ButtonGroup>
+                }
+                errorMessage={error}
 
-        </List >
-    );
-
-    // retorno forma como se vera
-    return (
-
-        <Container
-            component="main"
-            maxWidth="sm"
-        >
-
-            <h2>Contact List</h2>
-            {error && <Alert severity="error">{error}</Alert>}
-            {success && <Alert severity="success">{success} </Alert>}
-
+            />
             {contacts.map(contact => (
                 <ContactItem key={contact._id} contact={contact} />
             ))}

@@ -17,5 +17,4 @@ export const Modal = ({ open, title, body, footer, errorMessage }) => (
         </Transition.Child>
     </Transition.Root>
 
-
 );
